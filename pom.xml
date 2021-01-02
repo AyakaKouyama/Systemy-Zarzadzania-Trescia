@@ -9,9 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ecommerce</groupId>
-	<artifactId>ecommerce</artifactId>
+	<artifactId>main</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ecommerce</name>
+	<name>main</name>
+	<packaging>pom</packaging>
 	<description>Project for SZT classes [PUT]</description>
 
 	<properties>
@@ -31,13 +32,10 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	<modules>
+		<module>ecommerce-server</module>
+		<module>web</module>
+		<module>data-core</module>
+	</modules>
 
 </project>
