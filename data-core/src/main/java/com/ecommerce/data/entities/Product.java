@@ -8,7 +8,10 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -41,11 +44,15 @@ public class Product extends BaseEntity{
     @Column(name = "description", length = 20000)
     private String description;
 
-    @ManyToMany(mappedBy = "image")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User creator;
+
+    @ManyToMany(mappedBy = "products")
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Image> images = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "products")
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Category> categories = new ArrayList<>();
 }
