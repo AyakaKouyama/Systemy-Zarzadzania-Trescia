@@ -24,5 +24,5 @@ public abstract class BaseEntity {
 
     @Version
     @Column(name = "version")
-    protected Long version;
+    protected Long version = 0L;
 }

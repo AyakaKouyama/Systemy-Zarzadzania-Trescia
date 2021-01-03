@@ -1,13 +1,20 @@
 package com.ecommerce.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,18 +29,15 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "products"})
+@ToString(exclude={"products"})
 public class Category extends BaseEntity {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(cascade= CascadeType.ALL)
-    @JoinTable(name="product_category",
-            joinColumns = {
-                    @JoinColumn(name="product_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name="category_id")
-            })
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categories")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Product> products = new ArrayList<>();
 }

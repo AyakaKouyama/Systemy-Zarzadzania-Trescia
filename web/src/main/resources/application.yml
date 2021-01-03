@@ -12,3 +12,16 @@ spring:
     url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 12345678
+  servlet:
+      multipart:
+        max-file-size: 500MB
+        max-request-size: 500MB
+
+
+files:
+  imagePath: F:\img
+
+app:
+  service:
+    admin: http://localhost:8089/admin/
+    common: http://localhost:8089/common/

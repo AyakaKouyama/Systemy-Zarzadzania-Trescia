@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.sql.DataSource;
 
@@ -27,6 +30,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

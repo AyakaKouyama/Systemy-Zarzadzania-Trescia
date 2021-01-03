@@ -164,81 +164,7 @@ $(document).on('click', '.delete-file', function (e) {
 });
 
 
-$(document).on('click', '.mlp-learn', function (e) {
-    var form = document.getElementById("form");
-    var isValid = form.checkValidity();
 
-    if (isValid) {
-        var mlpConfig = {};
-
-        mlpConfig.hiddenLayers = document.getElementById("hiddenLayers").value;
-        mlpConfig.hiddenNeurons = document.getElementById("hiddenNeurons").value;
-        mlpConfig.learningDataSize = document.getElementById("learningDataSize").value;
-        mlpConfig.learningRate = document.getElementById("learningRate").value;
-        mlpConfig.batchSize = document.getElementById("batchSize").value;
-        mlpConfig.epochs = document.getElementById("epochs").value;
-        var optimizer = document.getElementById("optimizer");
-        mlpConfig.optimizer = optimizer.options[optimizer.selectedIndex].value;
-
-
-        $(this).addClass("hidden");
-        $(".hidden-learn").removeClass("hidden");
-
-        var url = $(this).attr('href');
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: JSON.stringify(mlpConfig),
-            contentType: 'application/json',
-            success: function (data) {
-                window.location.reload();
-            },
-            error: function (data) {
-                bootbox.alert(JSON.parse(data.responseText).message);
-                window.location.reload();
-            }
-        });
-    }
-
-});
-
-
-$(document).on('click', '.cnn-learn', function (e) {
-    var form = document.getElementById("form");
-    var isValid = form.checkValidity();
-
-    if (isValid) {
-        var cnnConfig = {};
-        cnnConfig.denseLayerNeurons = document.getElementById("denseLayerNeurons").value;
-        cnnConfig.convWindowSize = document.getElementById("convWindowSize").value;
-        cnnConfig.poolingWindowSize = document.getElementById("poolingWindowSize").value;
-        cnnConfig.filters = document.getElementById("filters").value;
-        cnnConfig.trainingDataSize = document.getElementById("trainingDataSize").value;
-        cnnConfig.testingDataSize = document.getElementById("testingDataSize").value;
-        cnnConfig.fromData = document.getElementById("fromData").value;
-        cnnConfig.epochs = document.getElementById("epochs").value;
-        var optimizer = document.getElementById("optimizer");
-        cnnConfig.optimizer = optimizer.options[optimizer.selectedIndex].value;
-
-        $(this).addClass("hidden");
-        $(".hidden-learn").removeClass("hidden");
-
-        var url = $(this).attr('href');
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: JSON.stringify(cnnConfig),
-            contentType: 'application/json',
-            success: function (data) {
-                window.location.reload(5);
-            },
-            error: function (data) {
-                bootbox.alert(JSON.parse(data.responseText).message);
-            }
-        });
-    }
-
-});
 
 
 $(document).on('click', '.select-all', function () {
@@ -467,3 +393,25 @@ $(document).on('click', '.terminate', function (e) {
         }
     });
 });
+
+
+$(document).on('click', '#add-category', function (e) {
+    var formData = {};
+    formData.name = document.getElementById("category-name").value;
+
+    var url = $(this).attr('href');
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
+        success: function (data) {
+            window.location.reload();
+        },
+        error: function (data) {
+            bootbox.alert(JSON.parse(data.responseText).message);
+            window.location.reload();
+        }
+    });
+});
+
