@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     <link href="../static/css/admin-styles.css" th:href="@{/css/admin-styles.css}" rel="stylesheet" />
+    <link href="../static/js/dropzone/dist/dropzone.css" th:href="@{/js/dropzone/dist/dropzone.css}" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/4d1f85718b.js" crossorigin="anonymous"></script>
 
 </head>
@@ -52,6 +53,9 @@
             </div>
         </div>
         <div>
+            <div class="product-form">
+                <img th:each="photo : ${images}" th:src="*{'data:image/png;base64,'+ photo}" class="image" >
+            </div>
             <form class="product-form">
                 <div class="form-group">
                     <label for="product-name">Nazwa</label>
@@ -90,10 +94,6 @@
                 <button type="submit" class="btn btn-primary" id="add-product" href="/admin/submit/product">Dodaj</button>
             </form>
         </div>
-        <div>Zdjęcia
-            <img th:each="photo : ${images}" th:src="*{'data:image/png;base64,'+ photo}" >
-        </th:block>
-        </div>
     </div>
 </div>
 
@@ -102,6 +102,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="../static/js/multiselect/js/jquery.multi-select.js" th:src="@{/js/multiselect/js/jquery.multi-select.js}" type="text/javascript"></script>
+<script th:src="@{/js/dropzone/dist/dropzone.js}"></script>
 <script th:src="@{/js/events_handler.js}" type="text/javascript"></script>
 
 <script>

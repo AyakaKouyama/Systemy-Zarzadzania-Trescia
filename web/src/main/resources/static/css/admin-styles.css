@@ -39,6 +39,19 @@ body {
     color: #389c8e;
 }
 
+.required{
+    color: #a3221e;
+}
+
+.error-block{
+    border: 4px solid #a3221e;
+    padding: 1rem;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 50%;
+    font-size: 1.1rem;
+}
+
 .select-all {
     margin-left: 5px;
     margin-bottom: 2rem;

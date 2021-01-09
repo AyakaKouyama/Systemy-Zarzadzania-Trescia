@@ -21,7 +21,7 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
 public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "login", nullable = false, unique = true)

@@ -1,5 +1,6 @@
 package com.web.services;
 
+import com.ecommerce.data.exceptions.ApiException;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +46,7 @@ public class ExchangeUtils {
         return builder.path("/" + subOperation).build().toUri();
     }
 
-    public static <T, K> String multipartPostData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, MultiValueMap<String, Object> data, String token) {
+    public static <T, K> String multipartPostData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, MultiValueMap<String, Object> data, String token) throws ApiException {
         HttpEntity entity;
         if(data != null){
             entity = getEntity(data, MediaType.MULTIPART_FORM_DATA, token);
@@ -57,7 +58,7 @@ public class ExchangeUtils {
         return res.getBody();
     }
 
-    public static <T, K> T postData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, K data, String token) {
+    public static <T, K> T postData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, K data, String token) throws ApiException {
         HttpEntity entity;
         if(data != null){
             entity = getEntity(data, MediaType.APPLICATION_JSON, token);
@@ -65,30 +66,32 @@ public class ExchangeUtils {
             entity = getEntity(token);
         }
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
-        T res = restTemplate.postForObject(uri, data, clazz);
+        T res = restTemplate.postForObject(uri, entity, clazz);
         return res;
     }
 
-    public static <T, K> List postListData(String serviceUrl, String operation, RestTemplate restTemplate, Map<String, String> params, K data, String token) {
+    public static <T, K> List postListData(String serviceUrl, String operation, RestTemplate restTemplate, Map<String, String> params, K data, String token) throws ApiException{
         HttpEntity entity;
         if(data != null){
             entity = getEntity(data, MediaType.APPLICATION_JSON, token);
         }else{
             entity = getEntity(token);
         }
+
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
-        List res = restTemplate.postForObject(uri, data, List.class);
+        List res = restTemplate.postForObject(uri, entity, List.class);
         return res;
     }
 
-    public static <T> T exchangeData(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) {
+    public static <T> T exchangeData(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) throws
+            ApiException {
         HttpEntity entity = ExchangeUtils.getEntity(token);
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         ResponseEntity<T> res = restTemplate.exchange(uri, method, entity, clazz);
         return res.getBody();
     }
 
-    public static <T>  ResponseEntity<T>  exchangeDataFullResponse(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) {
+    public static <T>  ResponseEntity<T>  exchangeDataFullResponse(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) throws ApiException {
         HttpEntity entity = ExchangeUtils.getEntity(token);
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         ResponseEntity<T> res = restTemplate.exchange(uri, method, entity, clazz);

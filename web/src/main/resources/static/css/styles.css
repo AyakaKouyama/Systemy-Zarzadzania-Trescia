@@ -168,6 +168,12 @@ body{
     display: none;
 }
 
+
+.image{
+    max-width: 10vw;
+    max-height: 10vw;
+}
+
 /* Extra small devices (phones, up to 480px) */
 @media screen and (max-width: 767px) {
     .main-container{

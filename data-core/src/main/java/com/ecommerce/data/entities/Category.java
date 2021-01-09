@@ -29,15 +29,17 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "products"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "products"}, ignoreUnknown = true)
 @ToString(exclude={"products"})
 public class Category extends BaseEntity {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
-    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Product> products = new ArrayList<>();
 }

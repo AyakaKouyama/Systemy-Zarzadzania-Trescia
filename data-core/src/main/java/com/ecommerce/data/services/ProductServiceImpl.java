@@ -32,4 +32,21 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteProduct(String productId) {
+        Product product = getProductById(Long.parseLong(productId));
+        if(product != null){
+            productRepository.delete(product);
+        }
+    }
+
+    @Override
+    public void activateProduct(String productId, Boolean active) {
+        Product product = getProductById(Long.parseLong(productId));
+        if(product != null){
+            product.setActive(!active);
+            productRepository.save(product);
+        }
+    }
 }

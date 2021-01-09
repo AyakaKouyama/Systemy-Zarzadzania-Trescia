@@ -29,7 +29,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
 @ToString(exclude={"categories", "images"})
 public class Product extends BaseEntity{
 
@@ -68,7 +68,7 @@ public class Product extends BaseEntity{
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Image> images = new ArrayList<>();
 
-    @ManyToMany(cascade= CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="product_category",
             joinColumns = {
                     @JoinColumn(name="category_id")

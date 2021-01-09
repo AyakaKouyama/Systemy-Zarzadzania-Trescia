@@ -5,11 +5,14 @@ import com.ecommerce.data.dtos.ProductDto;
 import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.entities.User;
+import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.services.CategoryService;
 import com.ecommerce.data.services.ProductService;
 import com.ecommerce.data.services.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -53,9 +56,12 @@ public class DataService {
         dest.setDescription(desc);
         dest.setPrice(price);
         dest.setQuantity(qty);
-        List<Category> cat = new ArrayList<>();
-        categories.forEach(f -> cat.add(getCategoryById(Long.parseLong(f))));
-        dest.getCategories().addAll(cat);
+        if(!CollectionUtils.isEmpty(categories)) {
+            List<Category> cat = new ArrayList<>();
+            categories.forEach(f -> cat.add(getCategoryById(Long.parseLong(f))));
+            dest.getCategories().addAll(cat);
+        }
+
         dest.setCreator(userService.findUserByLogin(userLogin));
         dest.setCreateDate(new Date());
         dest.setActive(true);
@@ -71,5 +77,21 @@ public class DataService {
 
     public Category getCategoryById(Long categoryId){
         return categoryService.getCategoryById(categoryId);
+    }
+
+    public void deleteProduct(String productId){
+        productService.deleteProduct(productId);
+    }
+
+    public void activateProduct(String productId, Boolean active){
+        productService.activateProduct(productId, active);
+    }
+
+    public void deleteCategory(String categoryId) throws AdminException {
+       categoryService.deleteCategory(categoryId);
+    }
+
+    public void activateCategory(String categoryId, Boolean active){
+        categoryService.activateCategory(categoryId, active);
     }
 }

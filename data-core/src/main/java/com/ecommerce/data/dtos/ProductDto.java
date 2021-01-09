@@ -25,7 +25,7 @@ public class ProductDto {
 
     private String sku;
 
-    private List<CategoryDto> categories;
+    private List<String> categories;
 
     private UserDto user;
 

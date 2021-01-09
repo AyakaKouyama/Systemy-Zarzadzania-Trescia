@@ -9,11 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class FileDto {
 
-    public FileDto(byte[] data, String name){
+    public FileDto(String data, String name){
         this.data = data;
         this.name = name;
     }
 
-    private byte[] data;
+    private String data;
     private String name;
 }

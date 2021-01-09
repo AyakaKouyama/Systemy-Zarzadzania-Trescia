@@ -1,5 +1,7 @@
 server:
   port: 8089
+  error:
+    include-message: always
 
 spring:
   jpa:
@@ -18,10 +20,6 @@ spring:
       max-request-size: 50MB
 
 
-
-jackson:
-  serialization:
-    fail-on-empty-beans: false
 
 files:
   imagePath: F:\img

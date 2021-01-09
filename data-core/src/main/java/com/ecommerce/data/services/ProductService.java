@@ -11,4 +11,9 @@ public interface ProductService {
     List<Product> getAllProducts();
 
     Product getProductById(Long id);
+
+    void deleteProduct(String productId);
+
+    void activateProduct(String productId, Boolean active);
+
 }

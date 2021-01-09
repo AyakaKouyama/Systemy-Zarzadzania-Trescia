@@ -54,8 +54,8 @@
         <div>
             <form class="product-form" th:action="@{/admin/submit/product}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="product-name">Nazwa</label>
-                    <input type="text" class="form-control" id="product-name" name="name">
+                    <label for="product-name">Nazwa <i class="fas fa-asterisk required"></i></label>
+                    <input type="text" class="form-control" id="product-name" name="name" required>
                 </div>
                 <div class="form-group">
                     <label for="sku">SKU</label>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="form-group">
                     <label for="file">Zdjęcie</label>
-                    <input type="file" class="form-control-file" id="file" name="file" multiple>
+                    <input type="file" class="form-control-file" id="file" name="file" max-size="2000" multiple>
                 </div>
                 <button type="submit" class="btn btn-primary" id="add-product" href="/admin/submit/product">Dodaj</button>
             </form>

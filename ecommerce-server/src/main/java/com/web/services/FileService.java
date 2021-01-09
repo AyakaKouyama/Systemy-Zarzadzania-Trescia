@@ -39,23 +39,23 @@ public class FileService {
         this.imageService = imageService;
     }
 
-    public void saveFile(List<byte[]> files, List<String> fileNames, Product product) throws FileException, IOException {
+    public void saveFile(List<FileDto> files, Product product) throws FileException, IOException {
         int i = 0;
 
-        for(byte[] file : files) {
-
-            String[] extensions = fileNames.get(i).split("\\.");
+        for(FileDto file : files) {
+            byte[] data = (Base64.getDecoder().decode(file.getData()));
+            String[] extensions = file.getName().split("\\.");
             UUID filename = UUID.randomUUID();
             String strFilename = filename.toString() + "." + extensions[extensions.length - 1];
             String path = imagePath + SEP + strFilename;
-            saveByteData(file, path);
+            saveByteData(data, path);
 
             Image image = new Image();
-            image.setAltName(fileNames.get(i));
+            image.setAltName(file.getName());
             image.setPath(path);
             image.getProducts().add(product);
             image.setFileName(strFilename);
-            image.setData(file);
+            image.setData(data);
             imageService.save(image);
 
             i++;
@@ -77,7 +77,7 @@ public class FileService {
         List<String> img = new ArrayList<>();
 
         for(Image image : images){
-            String base64 = new String(Base64.getEncoder().encode(image.getData()));
+            String base64 = Base64.getEncoder().encodeToString(image.getData());
             img.add(base64);
         }
 
