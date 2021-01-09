@@ -25,3 +25,4 @@ app:
   service:
     admin: http://localhost:8089/admin/
     common: http://localhost:8089/common/
+    login: http://localhost:8089/login

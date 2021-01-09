@@ -18,14 +18,18 @@ import java.util.Map;
 
 public class ExchangeUtils {
 
-    public static HttpEntity getEntity(){
+    public static HttpEntity getEntity(String token){
         HttpHeaders headers = new HttpHeaders();
+        if(token != null && !token.equals(""))
+            headers.add("Authorization", "Bearer " + token);
         return new HttpEntity<>(headers);
     }
 
-    public static HttpEntity getEntity(Object object, MediaType mediaType){
+    public static HttpEntity getEntity(Object object, MediaType mediaType, String token){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(mediaType);
+        if(token != null && !token.equals(""))
+            headers.add("Authorization", "Bearer " + token);
         return new HttpEntity<>(object, headers);
     }
 
@@ -41,46 +45,53 @@ public class ExchangeUtils {
         return builder.path("/" + subOperation).build().toUri();
     }
 
-    public static <T, K> String multipartPostData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, MultiValueMap<String, Object> data) {
+    public static <T, K> String multipartPostData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, MultiValueMap<String, Object> data, String token) {
         HttpEntity entity;
         if(data != null){
-            entity = getEntity(data, MediaType.MULTIPART_FORM_DATA);
+            entity = getEntity(data, MediaType.MULTIPART_FORM_DATA, token);
         }else{
-            entity = getEntity();
+            entity = getEntity(token);
         }
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         ResponseEntity<String> res = restTemplate.postForEntity(uri, entity, String.class);
         return res.getBody();
     }
 
-    public static <T, K> T postData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, K data) {
+    public static <T, K> T postData(String serviceUrl, String operation, Class<T> clazz, RestTemplate restTemplate, Map<String, String> params, K data, String token) {
         HttpEntity entity;
         if(data != null){
-            entity = getEntity(data, MediaType.APPLICATION_JSON);
+            entity = getEntity(data, MediaType.APPLICATION_JSON, token);
         }else{
-            entity = getEntity();
+            entity = getEntity(token);
         }
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         T res = restTemplate.postForObject(uri, data, clazz);
         return res;
     }
 
-    public static <T, K> List postListData(String serviceUrl, String operation, RestTemplate restTemplate, Map<String, String> params, K data) {
+    public static <T, K> List postListData(String serviceUrl, String operation, RestTemplate restTemplate, Map<String, String> params, K data, String token) {
         HttpEntity entity;
         if(data != null){
-            entity = getEntity(data, MediaType.APPLICATION_JSON);
+            entity = getEntity(data, MediaType.APPLICATION_JSON, token);
         }else{
-            entity = getEntity();
+            entity = getEntity(token);
         }
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         List res = restTemplate.postForObject(uri, data, List.class);
         return res;
     }
 
-    public static <T> T exchangeData(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params) {
-        HttpEntity entity = ExchangeUtils.getEntity();
+    public static <T> T exchangeData(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) {
+        HttpEntity entity = ExchangeUtils.getEntity(token);
         URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
         ResponseEntity<T> res = restTemplate.exchange(uri, method, entity, clazz);
         return res.getBody();
+    }
+
+    public static <T>  ResponseEntity<T>  exchangeDataFullResponse(String serviceUrl, String operation, HttpMethod method, ParameterizedTypeReference<T> clazz, RestTemplate restTemplate, Map<String, String> params, String token) {
+        HttpEntity entity = ExchangeUtils.getEntity(token);
+        URI uri = ExchangeUtils.getUri(serviceUrl, operation, params);
+        ResponseEntity<T> res = restTemplate.exchange(uri, method, entity, clazz);
+        return res;
     }
 }

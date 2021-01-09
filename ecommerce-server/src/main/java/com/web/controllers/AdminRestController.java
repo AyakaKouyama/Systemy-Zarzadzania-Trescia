@@ -10,6 +10,8 @@ import com.ecommerce.data.exceptions.FileException;
 import com.web.services.DataService;
 import com.web.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,10 +76,6 @@ public class AdminRestController extends BasicController {
         return fileService.decodeImages(images);
     }
 
-    @GetMapping("/me")
-    public User getMe(){
-        return getCurrentUser();
-    }
 
 
 }

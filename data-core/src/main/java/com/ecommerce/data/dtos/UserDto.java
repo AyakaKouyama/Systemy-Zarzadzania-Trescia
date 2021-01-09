@@ -12,4 +12,10 @@ public class UserDto {
     private Long id;
 
     private String login;
+
+    private String password;
+
+    public UserDto(String login){
+        this.login = login;
+    }
 }
