@@ -10,6 +10,10 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
+    List<Product> getAllActiveProducts();
+
+    List<Product> getAllActiveProductsByCategoryId(String categoryId);
+
     Product getProductById(Long id);
 
     void deleteProduct(String productId);

@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -77,4 +78,10 @@ public class Product extends BaseEntity{
                     @JoinColumn(name="product_id")
             })
     private List<Category> categories = new ArrayList<>();
+
+    @Transient
+    private List<String> stringImages = new ArrayList<>();
+
+
+
 }

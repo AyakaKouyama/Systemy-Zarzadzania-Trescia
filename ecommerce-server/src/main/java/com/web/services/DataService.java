@@ -42,6 +42,14 @@ public class DataService {
         return productService.getAllProducts();
     }
 
+    public List<Product> getAllPublicProducts(){
+        return productService.getAllActiveProducts();
+    }
+
+    public List<Product> getAllPublicProductsbyCategoryId(String categoryId){
+        return productService.getAllActiveProductsByCategoryId(categoryId);
+    }
+
     public void createCategory(String name){
         Category category = new Category();
         category.setName(name);

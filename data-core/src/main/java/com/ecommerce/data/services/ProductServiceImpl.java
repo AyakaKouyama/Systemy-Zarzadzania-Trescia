@@ -1,6 +1,8 @@
 package com.ecommerce.data.services;
 
+import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Product;
+import com.ecommerce.data.repositories.CategoryRepository;
 import com.ecommerce.data.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository){
+    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService){
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -26,6 +30,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public List<Product> getAllActiveProducts() {
+        return productRepository.getAllActiveProducts();
+    }
+
+    @Override
+    public List<Product> getAllActiveProductsByCategoryId(String categoryId) {
+        Category category = categoryService.getCategoryById(Long.parseLong(categoryId));
+        if(category != null) {
+            return productRepository.getAllActiveProductsByCategory(category);
+        }
+
+        return null;
     }
 
     @Override
