@@ -53,6 +53,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product getPublicProductById(Long id) {
+        return productRepository.getActiveProduct(id);
+    }
+
+    @Override
     public void deleteProduct(String productId) {
         Product product = getProductById(Long.parseLong(productId));
         if(product != null){

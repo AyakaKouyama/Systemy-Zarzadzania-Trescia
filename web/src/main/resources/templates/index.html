@@ -45,16 +45,19 @@
 				<p class="col-12 text-center">Total 3 HTML pages are included in this template. Header image has a parallax effect. You can feel free to download, edit and use this TemplateMo layout for your commercial or non-commercial websites.</p>
 			</header>
 
-			<label for="cars">Kategorie:</label>
-
-			<select id="categories" th:href="@{/products/category/}">
-				<option value="-1">Wszystkie</option>
-				<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">option</option>
-			</select>
 
 			<!-- Gallery -->
 			<div class="row-container tm-gallery justify-content-center" style="padding-bottom: 3rem;">
-				<!-- gallery page 1 -->
+
+				<label for="categories" style="font-weight: bold;">Kategorie:</label>
+
+				<select id="categories" th:href="@{/}" class="categories" style="margin-bottom: 1rem;">
+					<option th:if="${currentCategory != null}" th:value="${currentCategory.id}" th:text="${currentCategory.name}" selected></option>
+					<option th:selected="${currentCategory == null}" value="-1">Wszystkie</option>
+					<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">option</option>
+				</select>
+
+
 				<table class="table" id="main-table">
 					<thead>
 					<tr>
@@ -70,15 +73,15 @@
 										<div class="row">
 											<div class="col-md-5">
 												<div class="crop">
-													<img  th:if="${not #lists.isEmpty(product.stringImages)}" th:src="*{'data:image/png;base64,'+ product.stringImages[0]}" class="img-fluid tm-gallery-img"  >
-													<img  th:if="${#lists.isEmpty(product.stringImages)}" th:src="@{/img/no_image.png}" class="img-fluid tm-gallery-img"  >
+													<img  th:if="${not #lists.isEmpty(product.stringImages)}" th:src="*{'data:image/png;base64,'+ product.stringImages[0]}" class="img-fluid tm-gallery-img" style="max-width: 90%;max-height: 90%">
+													<img  th:if="${#lists.isEmpty(product.stringImages)}" th:src="@{/img/no-image.png}" class="img-fluid tm-gallery-img"  style="max-width: 90%;max-height: 90%">
 												</div>
 											</div>
 											<div class="col-md-6">
 												<h2 class="tm-gallery-title" th:text="${product.name}" style="font-size: 2rem;">Fusce dictum finibus</h2>
 												<p class="tm-gallery-description" th:text="${product.shortDescription}" style="font-size: 1rem">Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan</p>
 												<p class="tm-gallery-price" th:text="${product.price} + 'zł'" style="font-size: 1.7rem">$45 / $55</p>
-												<button type="button" class="btn btn-primary" style="float: right;margin-top: 2rem;">Dowiedz się więcej</button>
+												<a th:href="'/product/' + ${product.id}" type="button" class="btn btn-primary" style="float: right;margin-top: 2rem;">Dowiedz się więcej</a>
 											</div>
 										</div>
 									</div>
@@ -105,6 +108,16 @@
 			$('#main-table').DataTable({
 				"pageLength": 15,
 				"searching": false,
+				"ordering": false,
+				"language": {
+					"lengthMenu": "Wyświetl _MENU_ produktów",
+					"zeroRecords": "Nie znaleziono żadnych produktów",
+					"info": "Strona _PAGE_ z _PAGES_",
+					"paginate": {
+						"next": ">",
+						"previous": "<"
+					}
+				}
 			});
 		});
 	</script>

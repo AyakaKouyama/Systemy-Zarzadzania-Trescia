@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.active = true and :category MEMBER OF p.categories")
     List<Product> getAllActiveProductsByCategory(@Param("category")Category category);
+
+    @Query("SELECT p FROM Product p WHERE p.active = true and p.id = :id")
+    Product getActiveProduct(@Param("id")Long id);
 }

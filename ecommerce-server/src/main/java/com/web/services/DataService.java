@@ -50,6 +50,10 @@ public class DataService {
         return productService.getAllActiveProductsByCategoryId(categoryId);
     }
 
+    public Product getPublicProductbyId(String categoryId){
+        return productService.getPublicProductById(Long.parseLong(categoryId));
+    }
+
     public void createCategory(String name){
         Category category = new Category();
         category.setName(name);

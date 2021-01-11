@@ -51,4 +51,12 @@ public class CommonRestController extends BasicController {
 
         return products;
     }
+
+    @GetMapping("/products/{id}")
+    public Product getProductById(@PathVariable("id")String categoryId){
+        Product product = dataService.getPublicProductbyId(categoryId);
+        product.setStringImages(fileService.decodeImages(product.getImages()));
+
+        return product;
+    }
 }

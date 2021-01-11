@@ -417,17 +417,6 @@ $(document).on('click', '#add-category', function (e) {
 
 $(document).on('change', '#categories', function (e) {
     var id = $('#categories option:selected').val();
-    var url = $(this).attr('href') + id;
-    $.ajax({
-        type: 'GET',
-        url: url,
-        contentType: 'application/json',
-        success: function (data) {
-            window.location.reload();
-        },
-        error: function (data) {
-            window.location.reload();
-        }
-    });
+    window.location.href =window.location.href.replace( /[\?#].*|$/, "?category=" + id );
 });
 

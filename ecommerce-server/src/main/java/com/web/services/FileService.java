@@ -40,25 +40,23 @@ public class FileService {
     }
 
     public void saveFile(List<FileDto> files, Product product) throws FileException, IOException {
-        int i = 0;
-
         for(FileDto file : files) {
-            byte[] data = (Base64.getDecoder().decode(file.getData()));
-            String[] extensions = file.getName().split("\\.");
-            UUID filename = UUID.randomUUID();
-            String strFilename = filename.toString() + "." + extensions[extensions.length - 1];
-            String path = imagePath + SEP + strFilename;
-            saveByteData(data, path);
+            if(file.getData() != null && !file.getData().equals("")) {
+                byte[] data = (Base64.getDecoder().decode(file.getData()));
+                String[] extensions = file.getName().split("\\.");
+                UUID filename = UUID.randomUUID();
+                String strFilename = filename.toString() + "." + extensions[extensions.length - 1];
+                String path = imagePath + SEP + strFilename;
+                saveByteData(data, path);
 
-            Image image = new Image();
-            image.setAltName(file.getName());
-            image.setPath(path);
-            image.getProducts().add(product);
-            image.setFileName(strFilename);
-            image.setData(data);
-            imageService.save(image);
-
-            i++;
+                Image image = new Image();
+                image.setAltName(file.getName());
+                image.setPath(path);
+                image.getProducts().add(product);
+                image.setFileName(strFilename);
+                image.setData(data);
+                imageService.save(image);
+            }
         }
     }
 

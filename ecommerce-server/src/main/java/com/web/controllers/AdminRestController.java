@@ -81,7 +81,7 @@ public class AdminRestController extends BasicController {
         int i = 0;
         ProductDto productDto = createProductDto.getProductDto();
         Product product = dataService.createProduct(productDto.getName(), productDto.getSku(), productDto.getShortDescription(), productDto.getDescription(), productDto.getPrice(), productDto.getQty(), productDto.getCategories(), productDto.getUser().getLogin());
-       fileService.saveFile(createProductDto.getFiles(), product);
+        fileService.saveFile(createProductDto.getFiles(), product);
     }
 
 
