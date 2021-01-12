@@ -7,6 +7,7 @@ import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.entities.User;
 import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.services.CategoryService;
+import com.ecommerce.data.services.ImageService;
 import com.ecommerce.data.services.ProductService;
 import com.ecommerce.data.services.UserService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -26,12 +27,14 @@ public class DataService {
     private final CategoryService categoryService;
     private final ProductService productService;
     private final UserService userService;
+    private final ImageService imageService;
 
     @Autowired
-    public DataService(CategoryService categoryService, ProductService productService, UserService userService){
+    public DataService(CategoryService categoryService, ProductService productService, UserService userService, ImageService imageService){
         this.categoryService = categoryService;
         this.productService = productService;
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     public List<Category> getAllCategories(){
@@ -105,5 +108,9 @@ public class DataService {
 
     public void activateCategory(String categoryId, Boolean active){
         categoryService.activateCategory(categoryId, active);
+    }
+
+    public void deleteImage(String id) throws AdminException{
+        imageService.delete(id);
     }
 }

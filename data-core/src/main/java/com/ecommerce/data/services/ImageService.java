@@ -5,4 +5,6 @@ import com.ecommerce.data.entities.Image;
 public interface ImageService {
 
     void save(Image image);
+
+    void delete(String id);
 }

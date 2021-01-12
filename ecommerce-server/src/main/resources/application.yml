@@ -21,6 +21,7 @@ spring:
 
 
 
+
 files:
   imagePath: F:\img
 
@@ -30,3 +31,5 @@ app:
     common: localhost:8089/common/
 
 
+contact:
+  email: szt.sylwia.mieszkowska@gmail.com

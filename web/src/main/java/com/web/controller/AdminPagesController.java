@@ -6,6 +6,7 @@ import com.ecommerce.data.dtos.FileDto;
 import com.ecommerce.data.dtos.ProductDto;
 import com.ecommerce.data.dtos.UserDto;
 import com.ecommerce.data.entities.Category;
+import com.ecommerce.data.entities.Image;
 import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.exceptions.ApiException;
 import com.ecommerce.data.exceptions.FileException;
@@ -23,6 +24,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,7 +65,7 @@ public class AdminPagesController extends BasicController{
     }
 
     @RequestMapping(value = "/main")
-    public String adminMainPage(@CookieValue(value = "token", defaultValue = "")String token) {
+    public String adminMainPage() {
         return "admin-main";
     }
 
@@ -75,7 +77,7 @@ public class AdminPagesController extends BasicController{
 
     @RequestMapping(value = "/add/product")
     public String addProduct(ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
-        map.put("categories", getCategories(token));
+        map.put("categories", getCategories(token).stream().filter(Category::getActive).collect(Collectors.toList()));
         return "add-product";
     }
 
@@ -86,8 +88,26 @@ public class AdminPagesController extends BasicController{
         map.put("product", product);
         map.put("categoriesNames", product.getCategories().stream().map(Category::getName).collect(Collectors.toList()));
         map.put("categories", getCategories(token));
-        if(!CollectionUtils.isEmpty(product.getImages()))
-            map.put("images", ExchangeUtils.postListData(adminUrl, "image/decode", restTemplate, null, product.getImages(), token));
+        if(!CollectionUtils.isEmpty(product.getImages())) {
+            List<Image> images = new ArrayList<>();
+            List<String> imgData = ExchangeUtils.postListData(adminUrl,
+                    "image/decode",
+                    restTemplate,
+                    null,
+                    product.getImages(),
+                    token);
+
+            int c = 0;
+            for(String img : imgData){
+                Image i = new Image();
+                i.setStringData(img);
+                i.setFileName(product.getImages().get(c).getFileName());
+                i.setId(product.getImages().get(c).getId());
+                images.add(i);
+            }
+
+            map.put("images", images);
+        }
         return "edit-product";
     }
 
@@ -213,6 +233,22 @@ public class AdminPagesController extends BasicController{
         return "products";
     }
 
+    @RequestMapping("/image/delete/{id}")
+    public String deleteImage(@PathVariable(value = "id")String id, @CookieValue(value = "token", defaultValue = "")String token){
+        try {
+            ExchangeUtils.exchangeData(adminUrl,
+                    "image/" + id,
+                    HttpMethod.DELETE,
+                    new ParameterizedTypeReference<List<Category>>() {},
+                    restTemplate,
+                    null,
+                    token);
+        }catch (Exception e) {
+            return "error";
+        }
+
+        return "edit-product";
+    }
 
     private  List<Category> getCategories(String token){
         return ExchangeUtils.exchangeData(adminUrl, "categories", HttpMethod.GET, new ParameterizedTypeReference<List<Category>>() {}, restTemplate, null, token);

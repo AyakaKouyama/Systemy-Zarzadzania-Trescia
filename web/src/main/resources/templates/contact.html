@@ -9,12 +9,14 @@
     <title>Simple House Template</title>
 	<link href="../static/js/bootstrap-5/css/bootstrap.css" th:href="@{/js/bootstrap-5/css/bootstrap.css}" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" />
+	<link rel="stylesheet" href="//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
 	<link href="../static/css/common-styles.css" th:href="@{/css/common-styles.css}" rel="stylesheet" />
+	<script src="https://kit.fontawesome.com/4d1f85718b.js" crossorigin="anonymous"></script>
 </head>
 
 <body> 
 
-	<div class="container" style="background-color: white;padding-bottom: 2rem;">
+	<div class="container" style="background-color: white">
 		<div>
 			<div class="parallax-window" data-parallax="scroll" th:data-image-src="@{/img/banner.jpg}">
 				<a href="/">
@@ -42,24 +44,19 @@
 
 		<main>
 			<!-- Gallery -->
-			<div class="row-container tm-gallery justify-content-center" style="margin-bottom: 3rem;margin-top:2rem;">
-				<!-- gallery page 1 -->
-				<div class="container" style="margin-top: 3rem;">
-					<div class="row">
-						<div class="col-md-6" style="margin-bottom: 3rem;">
-							<img  th:if="${!#lists.isEmpty(product.stringImages)}" th:src="*{'data:image/png;base64,'+ product.stringImages[0]}" class="img-fluid tm-gallery-img box-shadow">
-							<img  th:if="${#lists.isEmpty(product.stringImages)}" th:src="@{/img/no-image.png}" class="img-fluid tm-gallery-img">
-						</div>
-						<div class="col-md-6">
-							<h2 class="tm-gallery-title" th:text="${product.name}" style="font-size: 2rem;">Fusce dictum finibus</h2>
-							<p class="tm-gallery-description" th:text="${product.shortDescription}" style="font-size: 1rem">Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan</p>
-							<p class="tm-gallery-price" th:text="${product.price} + 'zł'" style="font-size: 1.7rem">$45 / $55</p>
-						</div>
+			<div class="row-container tm-gallery justify-content-center" style="padding-bottom: 3rem;">
+				<div style="margin-bottom:2rem;margin-top:1rem;font-size:1.5rem;" th:if="${response != null}" th:text="${response}"></div>
+				<form  th:action="@{/contact/send}" method="post" style="margin-top: 2rem;">
+					<div class="form-group">
+						<label for="email-input">Twój adres e-mail</label>
+						<input type="email" name="email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
 					</div>
-				</div>
-				<div class="container">
-					<p class="tm-gallery-description details-description" th:text="${product.description}" style="font-size: 1rem">Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan</p>
-				</div>
+					<div class="form-group">
+						<label for="message">Wiadomość</label>
+						<textarea class="form-control" name="message" id="message" rows="5"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Wyślij <i class="fas fa-paper-plane"></i></button>
+				</form>
 			</div>
 
 		</main>
@@ -67,12 +64,10 @@
 
 	<script th:src="@{/js/bootstrap-5/js/bootstrap.js}" src="../static/js/bootstrap-5/js/bootstrap.js"></script>
 	<script th:src="@{/js/jquery/jquery-3.4.1.min.js}" type="text/javascript"></script>
-	<script th:src="@{/js/gallery-2/src/simplegallery.min.js}" src="../static/js/gallery-2/src/simplegallery.min.js"></script>
+	<script src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/js/dropzone/dist/dropzone.js}"></script>
+	<script th:src="@{/js/paralax/parallax.min.js}"></script>
 	<script th:src="@{/js/events_handler.js}" type="text/javascript"></script>
 
-	<script>
-		jQuery(document).ready(function () {
-		});
-	</script>
 </body>
 </html>

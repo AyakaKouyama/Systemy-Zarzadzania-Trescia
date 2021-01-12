@@ -110,6 +110,11 @@ public class AdminRestController extends BasicController {
         return fileService.decodeImages(images);
     }
 
+    @DeleteMapping("/image/{id}")
+    private void deleteImage(@PathVariable("id")String id) throws AdminException{
+        dataService.deleteImage(id);
+    }
+
 
 
 }

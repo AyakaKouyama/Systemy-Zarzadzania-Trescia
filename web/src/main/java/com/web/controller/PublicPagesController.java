@@ -1,5 +1,6 @@
 package com.web.controller;
 
+import com.ecommerce.data.dtos.ContactEmailDto;
 import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.services.UserService;
@@ -15,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -38,6 +40,16 @@ public class PublicPagesController extends BasicController {
     public PublicPagesController(@Value("${app.service.common}") String commonUrl, RestTemplate restTemplate){
         this.commonUrl = commonUrl;
         this.restTemplate = restTemplate;
+    }
+
+    @RequestMapping(value = "/about")
+    public String getAboutPage(){
+        return "about";
+    }
+
+    @RequestMapping(value = "/contact")
+    public String getContactPage(){
+        return "contact";
     }
 
     @RequestMapping(value = "/")
@@ -77,4 +89,17 @@ public class PublicPagesController extends BasicController {
         map.put("product", product);
         return "main-product";
     }
+
+
+    @PostMapping(value = "/contact/send")
+    public String sendEContactEmail(ModelMap map, @ModelAttribute ContactEmailDto message){
+        try{
+            ExchangeUtils.postData(commonUrl, "contact/send", ContactEmailDto.class, restTemplate, null, message, null);
+            map.put("response", "Twoja wiadomosć została wysłana. Dziękujemy!");
+        }catch (Exception e) {
+            map.put("response", "Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie później.");
+        }
+
+        return "contact";
+     }
 }

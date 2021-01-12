@@ -19,6 +19,9 @@ body {
     border-color: #d75442;
 }
 
+.edit-image:hover{
+    opacity: 80%;
+}
 
 .btn-success {
     color: #fff;

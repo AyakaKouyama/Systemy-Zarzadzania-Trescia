@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class Image extends BaseEntity {
     @Column(name = "image_data", nullable = false)
     private byte[] data;
 
-    @ManyToMany(cascade= CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name="product_image",
             joinColumns = {
                     @JoinColumn(name="image_id")
@@ -52,4 +53,7 @@ public class Image extends BaseEntity {
                     @JoinColumn(name="product_id")
             })
     private List<Product> products = new ArrayList<>();
+
+    @Transient
+    private String stringData;
 }
