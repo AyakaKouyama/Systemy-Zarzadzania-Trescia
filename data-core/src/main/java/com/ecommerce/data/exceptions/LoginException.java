@@ -3,10 +3,10 @@ package com.ecommerce.data.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class AdminException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+public class LoginException extends RuntimeException {
 
-    public AdminException(String message) {
+    public LoginException(String message) {
         super(message);
     }
 }

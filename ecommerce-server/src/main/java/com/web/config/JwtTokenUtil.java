@@ -3,15 +3,14 @@ package com.web.config;
 import com.ecommerce.data.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Jwts;
 
-import java.security.SignatureException;
 import java.util.Date;
 
 import static java.lang.String.format;
@@ -29,7 +28,7 @@ public class JwtTokenUtil {
                 .setSubject(format("%s,%s", user.getId(), user.getLogin()))
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)) // 1 day
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

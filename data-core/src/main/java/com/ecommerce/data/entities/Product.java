@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,8 +30,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
-@ToString(exclude={"categories", "images"})
-public class Product extends BaseEntity{
+@ToString(exclude = {"categories", "images"})
+public class Product extends BaseEntity {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -70,18 +69,15 @@ public class Product extends BaseEntity{
     private List<Image> images = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="product_category",
+    @JoinTable(name = "product_category",
             joinColumns = {
-                    @JoinColumn(name="category_id")
+                    @JoinColumn(name = "category_id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name="product_id")
+                    @JoinColumn(name = "product_id")
             })
     private List<Category> categories = new ArrayList<>();
 
     @Transient
     private List<String> stringImages = new ArrayList<>();
-
-
-
 }

@@ -8,6 +8,7 @@ import com.ecommerce.data.dtos.UserDto;
 import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Image;
 import com.ecommerce.data.entities.Product;
+import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.exceptions.ApiException;
 import com.ecommerce.data.exceptions.FileException;
 import com.web.services.ExchangeUtils;
@@ -82,16 +83,16 @@ public class AdminPagesController extends BasicController{
     }
 
     @RequestMapping(value = "/product/{id}")
-    public String editProduct(@PathVariable("id")String productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
+    public String editProduct(@PathVariable("id")Long productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
 
-        Product product =  ExchangeUtils.exchangeData(adminUrl, "product/" + productId, HttpMethod.GET, new ParameterizedTypeReference<Product>() {}, restTemplate, null, token);
+        Product product =  ExchangeUtils.exchangeData(adminUrl, "products/" + productId, HttpMethod.GET, new ParameterizedTypeReference<Product>() {}, restTemplate, null, token);
         map.put("product", product);
         map.put("categoriesNames", product.getCategories().stream().map(Category::getName).collect(Collectors.toList()));
         map.put("categories", getCategories(token));
         if(!CollectionUtils.isEmpty(product.getImages())) {
             List<Image> images = new ArrayList<>();
             List<String> imgData = ExchangeUtils.postListData(adminUrl,
-                    "image/decode",
+                    "images/decode",
                     restTemplate,
                     null,
                     product.getImages(),
@@ -112,18 +113,18 @@ public class AdminPagesController extends BasicController{
     }
 
     @RequestMapping(value = "/product/{id}/delete")
-    public String deleteProduct(@PathVariable("id")String productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
-        ExchangeUtils.exchangeData(adminUrl, "product/" + productId, HttpMethod.DELETE, new ParameterizedTypeReference<Product>() {}, restTemplate, null, token);
+    public String deleteProduct(@PathVariable("id")Long productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
+        ExchangeUtils.exchangeData(adminUrl, "products/" + productId, HttpMethod.DELETE, new ParameterizedTypeReference<Product>() {}, restTemplate, null, token);
         map.put("products", getProducts(token));
         return "products";
     }
 
     @RequestMapping(value = "/product/{id}/activate")
-    public String activateProduct(@PathVariable("id")String productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
+    public String activateProduct(@PathVariable("id")Long productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
         Map<String, String> params = new HashMap<>();
         params.put("active", active.toString());
 
-        ExchangeUtils.exchangeData(adminUrl, "product/" + productId + "/activate", HttpMethod.POST, new ParameterizedTypeReference<Product>() {}, restTemplate, params, token);
+        ExchangeUtils.exchangeData(adminUrl, "products/" + productId + "/activate", HttpMethod.POST, new ParameterizedTypeReference<Product>() {}, restTemplate, params, token);
         map.put("products", getProducts(token));
         return "products";
     }
@@ -140,104 +141,176 @@ public class AdminPagesController extends BasicController{
     }
 
     @RequestMapping(value = "/category/{id}")
-    public String editCategory(@PathVariable("id")String categoryId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
-        Category category =  ExchangeUtils.exchangeData(adminUrl, "category/" + categoryId, HttpMethod.GET, new ParameterizedTypeReference<Category>() {}, restTemplate, null, token);
+    public String editCategory(@PathVariable("id")Long categoryId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
+        Category category =  ExchangeUtils.exchangeData(adminUrl, "categories/" + categoryId, HttpMethod.GET, new ParameterizedTypeReference<Category>() {}, restTemplate, null, token);
         map.put("category", category);
         return "edit-category";
     }
 
     @GetMapping(value = "/category/{id}/activate")
-    public String activateCategory(@PathVariable("id")String categoryId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
+    public String activateCategory(@PathVariable("id")Long categoryId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
         Map<String, String> params = new HashMap<>();
         params.put("active", active.toString());
 
-        ExchangeUtils.exchangeData(adminUrl, "category/" + categoryId + "/activate", HttpMethod.POST, new ParameterizedTypeReference<Product>() {}, restTemplate, params, token);
+        ExchangeUtils.exchangeData(adminUrl, "categories/" + categoryId + "/activate", HttpMethod.POST, new ParameterizedTypeReference<Product>() {}, restTemplate, params, token);
         map.put("categories",getCategories(token));
         return "categories";
     }
 
     @RequestMapping(value = "/category/{id}/delete")
-    public String deleteCategory(@PathVariable("id")String productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
+    public String deleteCategory(@PathVariable("id")Long productId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
         try {
             ExchangeUtils.exchangeData(adminUrl,
-                    "category/" + productId,
+                    "categories/" + productId,
                     HttpMethod.DELETE,
                     new ParameterizedTypeReference<Product>() {},
                     restTemplate,
                     null,
                     token);
         }catch (ApiException exc){
-            map.put("error", exc.getMessage());
+            if(exc.getMessage().equals("Cannot delete category that has assigned products.")) {
+                map.put("error", "Nie można usunąć kategorii, która posiada przypisane produkty.");
+            }else{
+                map.put("error", "Wystąpił nieznany błąd. Spróbuj ponownie później.");
+            }
         }
 
         map.put("categories",getCategories(token));
         return "categories";
     }
 
-    @RequestMapping(value = "/submit/category")
-    @ResponseBody
-    public void submitCategory(@RequestBody CategoryDto category, @CookieValue(value = "token", defaultValue = "")String token) {
-        ExchangeUtils.postData(adminUrl, "category", Product.class, restTemplate, null, category.getName(), token);
+    @RequestMapping(value = {"/submit/category", "/submit/category/{id}"}, consumes = {"multipart/form-data"})
+    public String submitCategory(@RequestParam("name") String name, @CookieValue(value = "token", defaultValue = "")String token, @PathVariable(value = "id", required = false) Long id, ModelMap map) {
+        CategoryDto category = new CategoryDto();
+        category.setName(name);
+        category.setId(id);
+
+        try {
+            ExchangeUtils.postData(adminUrl, "categories", CategoryDto.class, restTemplate, null, category, token);
+        }catch (ApiException exception){
+            map.put("error", "Kategoria o podanej nazwie już istnieje.");
+
+            if(id != null){
+                Category cat =  ExchangeUtils.exchangeData(adminUrl, "categories/" + id, HttpMethod.GET, new ParameterizedTypeReference<Category>() {}, restTemplate, null, token);
+                map.put("category", cat);
+                return "edit-category";
+            }else{
+                return "add-category";
+            }
+        }
+
+        map.put("categories",getCategories(token));
+        return "categories";
     }
 
-    @RequestMapping(value = "/submit/product", consumes = {"multipart/form-data"})
-    public String submitProduct(@RequestParam("file") List<MultipartFile> files, @RequestParam("name")String name, @RequestParam(value = "my-select[]", required = false)
-            List<String> categories,  @RequestParam("sku")String sku,  @RequestParam("short-desc")String shortDesc,  @RequestParam("desc")String desc,  @RequestParam("price")BigDecimal price,  @RequestParam(value = "qty", required = false)BigInteger qty, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token)
+    @RequestMapping(value = {"/submit/product", "/submit/product/{id}"}, consumes = {"multipart/form-data"})
+    public String submitProduct(@PathVariable(value = "id", required = false) Long id, @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam(value = "name", required = true)String name, @RequestParam(value = "my-select[]", required = false)
+            List<String> categories,  @RequestParam(value = "sku", required = false)String sku,  @RequestParam(value = "short-desc", required = false)String shortDesc,  @RequestParam(value = "desc", required = false)String desc,  @RequestParam(value = "price", required = false)BigDecimal price,  @RequestParam(value = "qty", required = false)BigInteger qty, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token)
             throws IOException, FileException {
 
         List<FileDto> filesDto = new ArrayList<>();
-        List<String> names = new ArrayList<>();
-        files.forEach(f -> {
+        if(files != null) {
+
+            files.forEach(f -> {
+                try {
+                    if(!f.getOriginalFilename().equals("") && !f.getOriginalFilename().endsWith(".jpg")){
+                        map.put("error", "Niedozwolony format plików. Akceptowane formaty: jpg.");
+                        return;
+                    }else if(f.getSize() > 2000000L){
+                        map.put("error", "Maksymalny rozmiar plików to 2 MB.");
+                        return;
+                    }
+
+                    filesDto.add(new FileDto(new String(Base64.getEncoder().encode(f.getBytes())),
+                            f.getOriginalFilename()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        if (!map.containsAttribute("error")) {
+            CreateProductDto createProductDto = new CreateProductDto();
+            createProductDto.setFiles(filesDto);
+
+            ProductDto productDto = new ProductDto();
+            productDto.setName(name);
+            productDto.setSku(sku);
+            productDto.setShortDescription(shortDesc);
+            productDto.setDescription(desc);
+            productDto.setPrice(price);
+            productDto.setQty(qty);
+            productDto.setCategories(categories);
+            productDto.setUser(new UserDto(getCurrentUser(token).getLogin()));
+            productDto.setId(id);
+            createProductDto.setProductDto(productDto);
+
             try {
-                filesDto.add(new FileDto(new String(Base64.getEncoder().encode(f.getBytes())), f.getOriginalFilename()));
-            } catch (IOException e) {
-                e.printStackTrace();
+                ExchangeUtils.postData(adminUrl,
+                        "products",
+                        CreateProductDto.class,
+                        restTemplate,
+                        null,
+                        createProductDto,
+                        token);
+            }catch (ApiException exc){
+                if(exc.getMessage().equalsIgnoreCase("Product with this name already exists.")) {
+                    map.put("error", "Produkt o podanej nazwie już istnieje.");
+                }
             }
-            names.add(f.getOriginalFilename());
 
-        });
+        }
 
+        if(map.containsAttribute("error")){
+            if(id != null) {
+                Product product = ExchangeUtils.exchangeData(adminUrl,
+                        "products/" + id,
+                        HttpMethod.GET,
+                        new ParameterizedTypeReference<Product>() {},
+                        restTemplate,
+                        null,
+                        token);
+                map.put("product", product);
+                map.put("categoriesNames",
+                        product.getCategories().stream().map(Category::getName).collect(Collectors.toList()));
+                map.put("categories", getCategories(token));
+                if (!CollectionUtils.isEmpty(product.getImages())) {
+                    List<Image> images = new ArrayList<>();
+                    List<String> imgData = ExchangeUtils.postListData(adminUrl,
+                            "images/decode",
+                            restTemplate,
+                            null,
+                            product.getImages(),
+                            token);
 
-      /*  MultiValueMap<String, Object> data = new LinkedMultiValueMap<>();
-        data.put("file", new ArrayList<>(filesDto));
-        data.put("fileName", new ArrayList<>(names));
-        data.add("name", name);
-        data.add("sku", sku);
-        data.add("short-desc", shortDesc);
-        data.add("desc", desc);
-        data.add("price", price);
-        data.add("qty", qty);
-        data.put("my-select[]", new ArrayList<>(categories));
-        data.add("userLogin", getCurrentUser(token).getLogin()); */
+                    int c = 0;
+                    for (String img : imgData) {
+                        Image i = new Image();
+                        i.setStringData(img);
+                        i.setFileName(product.getImages().get(c).getFileName());
+                        i.setId(product.getImages().get(c).getId());
+                        images.add(i);
+                    }
 
-        CreateProductDto createProductDto = new CreateProductDto();
-        createProductDto.setFiles(filesDto);
-
-        ProductDto productDto = new ProductDto();
-        productDto.setName(name);
-        productDto.setSku(sku);
-        productDto.setShortDescription(shortDesc);
-        productDto.setDescription(desc);
-        productDto.setPrice(price);
-        productDto.setQty(qty);
-        productDto.setCategories(categories);
-        productDto.setUser(new UserDto(getCurrentUser(token).getLogin()));
-
-        createProductDto.setProductDto(productDto);
-
-        ExchangeUtils.postData(adminUrl, "product", CreateProductDto.class, restTemplate, null,createProductDto, token);
-
-       // fileService.saveFile(files, product);
+                    map.put("images", images);
+                }
+                return "edit-product";
+            }else{
+                map.put("categories", getCategories(token).stream().filter(Category::getActive).collect(Collectors.toList()));
+                return "add-product";
+            }
+        }
 
         map.put("products", getProducts(token));
         return "products";
     }
 
     @RequestMapping("/image/delete/{id}")
-    public String deleteImage(@PathVariable(value = "id")String id, @CookieValue(value = "token", defaultValue = "")String token){
+    @ResponseBody
+    public String deleteImage(@PathVariable(value = "id")Long id, @CookieValue(value = "token", defaultValue = "")String token){
         try {
             ExchangeUtils.exchangeData(adminUrl,
-                    "image/" + id,
+                    "images/" + id,
                     HttpMethod.DELETE,
                     new ParameterizedTypeReference<List<Category>>() {},
                     restTemplate,
@@ -247,7 +320,7 @@ public class AdminPagesController extends BasicController{
             return "error";
         }
 
-        return "edit-product";
+        return "ok";
     }
 
     private  List<Category> getCategories(String token){

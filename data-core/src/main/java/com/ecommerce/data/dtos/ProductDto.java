@@ -29,4 +29,6 @@ public class ProductDto {
 
     private UserDto user;
 
+    private Long id;
+
 }

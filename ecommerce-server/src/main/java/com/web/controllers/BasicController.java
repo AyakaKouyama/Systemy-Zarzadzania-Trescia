@@ -18,16 +18,13 @@ public abstract class BasicController {
     @ModelAttribute("currentUser")
     protected User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null)
-            return null;
+        if (authentication == null) { return null; }
 
         String username = authentication.getName();
-        if (username == null || username.length() < 1)
-            return null;
+        if (username == null || username.length() < 1) { return null; }
 
         User user = userService.findUserByLogin(username);
-        if (user == null)
-            return null;
+        if (user == null) { return null; }
 
         return user;
     }

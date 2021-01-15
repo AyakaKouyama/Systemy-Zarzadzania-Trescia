@@ -31,7 +31,6 @@
 						<nav class="col-md-6 col-12 tm-nav">
 							<ul class="tm-nav-ul">
 								<li class="tm-nav-li"><a href="/" class="tm-nav-link active">Strona główna</a></li>
-								<li class="tm-nav-li"><a href="/about" class="tm-nav-link">O nas</a></li>
 								<li class="tm-nav-li"><a href="/contact" class="tm-nav-link">Kontakt</a></li>
 							</ul>
 						</nav>	
@@ -52,7 +51,7 @@
 						</div>
 						<div class="col-md-6">
 							<h2 class="tm-gallery-title" th:text="${product.name}" style="font-size: 2rem;">Fusce dictum finibus</h2>
-							<p class="tm-gallery-description" th:text="${product.shortDescription}" style="font-size: 1rem">Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan</p>
+							<p class="tm-gallery-description details-description" th:text="${product.shortDescription}" style="font-size: 1rem">Nam in suscipit nisi, sit amet consectetur metus. Ut sit amet tellus accumsan</p>
 							<p class="tm-gallery-price" th:text="${product.price} + 'zł'" style="font-size: 1.7rem">$45 / $55</p>
 						</div>
 					</div>

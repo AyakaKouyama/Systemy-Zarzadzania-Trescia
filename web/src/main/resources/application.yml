@@ -1,5 +1,6 @@
 server:
-  port: 8080
+  port: 5000
+  forward-headers-strategy: framework
 
 spring:
   jpa:
@@ -9,9 +10,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: 12345678
+    url: jdbc:mysql://szt.cvgdaih6dhcu.eu-central-1.rds.amazonaws.com:3306/szt?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+    username: admin
+    password: NFHNI>|bdUjbx$0L
+   #url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+   #username: root
+   #password: 12345678
   servlet:
       multipart:
         max-file-size: 500MB
@@ -23,6 +27,11 @@ files:
 
 app:
   service:
-    admin: http://localhost:8089/admin/
-    common: http://localhost:8089/common/
-    login: http://localhost:8089/login
+    admin: http://ecommerce-env.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/admin/
+    common: http://ecommerce-env.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/common/
+    login: http://ecommerce-env.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/login
+
+
+    #admin: http://localhost:8089/admin/
+    #common: http://localhost:8089/common/
+    #login: http://localhost:8089/login

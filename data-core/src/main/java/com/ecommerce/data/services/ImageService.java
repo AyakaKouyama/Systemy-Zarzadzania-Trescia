@@ -6,5 +6,5 @@ public interface ImageService {
 
     void save(Image image);
 
-    void delete(String id);
+    void delete(Long id);
 }

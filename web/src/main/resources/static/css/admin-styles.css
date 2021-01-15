@@ -23,6 +23,28 @@ body {
     opacity: 80%;
 }
 
+.img-trash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    color: white;
+}
+
+.edit-image-container:hover i {
+    visibility: visible;
+}
+
+.edit-image-container i {
+    visibility: hidden;
+}
+
+.edit-image-container {
+    position: relative;
+    text-align: center;
+}
+
 .btn-success {
     color: #fff;
     background-color: #389c8e;

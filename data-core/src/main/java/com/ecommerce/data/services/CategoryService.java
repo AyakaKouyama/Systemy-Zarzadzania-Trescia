@@ -9,11 +9,13 @@ public interface CategoryService {
 
     List<Category> getAllCategories();
 
+    List<Category> getAllActiveCategories();
+
     void save(Category category);
 
     Category getCategoryById(Long id);
 
-    void deleteCategory(String productId) throws AdminException;
+    void deleteCategory(Long categoryId) throws AdminException;
 
-    void activateCategory(String productId, Boolean active);
+    void activateCategory(Long categoryId);
 }

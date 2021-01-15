@@ -30,7 +30,7 @@
             </li>
             <li>
                 <a href="/admin/products">
-                    <i class="fa fa-chart-line"></i> Produkty
+                    <i class="fa fa-shopping-cart"></i>  Produkty
                 </a>
             </li>
             <li>
@@ -49,19 +49,22 @@
     <div class="content-container">
         <div class="container-fluid">
             <div class="jumbotron">
-                <h1>Edytuj produkt</h1>
+                <h1>Edytuj kategorię</h1>
             </div>
+        </div>
+        <div class="product-form" style="margin-bottom: 2rem;">
+            <h4 th:if="${error != null}" th:text="${error}"></h4>
         </div>
         <div>
             <div class="product-form">
                 <img th:each="photo : ${images}" th:src="*{'data:image/png;base64,'+ photo}" class="image" >
             </div>
-            <form class="product-form">
+            <form class="product-form" th:action="@{'/admin/submit/category/' + ${category.id}}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="category-name">Nazwa</label>
-                    <input type="text" class="form-control" id="category-name" th:value="${category.name}">
+                    <label for="category-name">Nazwa <i class="fas fa-asterisk required"></i></label>
+                    <input type="text" name="name" class="form-control" id="category-name" th:value="${category.name}">
                 </div>
-                <button type="submit" class="btn btn-primary" id="add-category" href="/admin/submit/category">Dodaj</button>
+                <button type="submit" class="btn btn-primary" id="add-category">Edytuj</button>
             </form>
         </div>
     </div>

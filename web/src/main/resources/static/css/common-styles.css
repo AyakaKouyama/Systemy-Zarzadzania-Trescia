@@ -31,10 +31,6 @@ html {
   padding-right: 15px;
 }
 
-.row-container {
-  max-width: 80%;
-}
-
 .inline{
   display: inline;
   max-width: 40%;
@@ -48,8 +44,8 @@ html {
 }
 
 .article-border:hover{
-  background-color: #f0f4f5;
-  border: 2px solid #f0f4f5;
+  background-color: #f5f7f7;
+  border: 2px solid #f5f7f7;
 }
 
 .crop{
@@ -219,7 +215,7 @@ html {
 body {
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 17px;
-  background-color: #ccc;
+  background-color: #d5dfe0;
   overflow-x: hidden;
 }
 
@@ -245,7 +241,6 @@ p, address {
 }
 
 .parallax-window {
-  min-height: 460px;
   background: transparent;
   position: relative;
 }
@@ -291,11 +286,6 @@ p, address {
   display: inline-block;
 }
 
-.tm-site-title {
-  font-size: 2.2rem;
-  font-weight: 400;
-  margin-bottom: 5px;
-}
 
 .tm-site-description {
   font-size: 1.1rem;
@@ -870,4 +860,73 @@ address {
 
 .panel p {
   padding: 5px 20px 30px;
+}
+.container{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Extra small devices (phones, up to 480px) */
+@media screen and (max-width: 767px) {
+  .container{
+    max-width: 100vh;
+    padding: 0 !important;
+  }
+  .tm-site-title {
+    font-size: 0;
+  }
+  .tm-site-description {
+    font-size: 0;
+  }
+  .btn-more{
+    margin-right: 20px;
+  }
+
+  body{
+    background-color: white;
+  }
+  .row-container{
+    max-width: 100%;
+  }
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .container{
+    max-width: 100vh;
+  }
+
+  .row > *{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .row-container {
+    max-width: 80%;
+  }
+
+
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container{
+    max-width: 100vh;
+    padding: 0 !important;
+  }
+  .row-container {
+    max-width: 80%;
+  }
+
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
+
+  .tm-site-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin-bottom: 5px;
+  }
+  .row-container {
+    max-width: 80%;
+  }
+
 }

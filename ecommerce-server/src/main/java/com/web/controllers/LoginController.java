@@ -3,7 +3,7 @@ package com.web.controllers;
 import com.ecommerce.data.dtos.AuthRequest;
 import com.ecommerce.data.dtos.UserDto;
 import com.ecommerce.data.entities.User;
-import com.ecommerce.data.repositories.UserRepository;
+import com.ecommerce.data.exceptions.ApiException;
 import com.ecommerce.data.services.UserService;
 import com.web.config.JwtTokenUtil;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 
 import static ch.qos.logback.core.util.OptionHelper.isEmpty;
@@ -39,7 +40,7 @@ public class LoginController {
     }
 
     @PostMapping()
-    public ResponseEntity<UserDto> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<UserDto> login(@RequestBody AuthRequest request) throws LoginException {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(
@@ -58,12 +59,12 @@ public class LoginController {
                     )
                     .body(userDto);
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+           throw new LoginException("Invalid login or password");
         }
     }
 
     @GetMapping("/me")
-    public UserDto me(HttpServletRequest request){
+    public UserDto me(HttpServletRequest request) {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (isEmpty(header) || !header.startsWith("Bearer ")) {
             return null;

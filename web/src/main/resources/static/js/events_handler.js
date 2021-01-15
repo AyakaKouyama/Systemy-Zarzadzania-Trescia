@@ -395,28 +395,26 @@ $(document).on('click', '.terminate', function (e) {
 });
 
 
-$(document).on('click', '#add-category', function (e) {
-    var formData = {};
-    formData.name = document.getElementById("category-name").value;
+$(document).on('change', '#categories', function (e) {
+    var id = $('#categories option:selected').val();
+    window.location.href =window.location.href.replace( /[\?#].*|$/, "?category=" + id );
+});
 
+
+$(document).on('click', '.delete-image', function (e) {
     var url = $(this).attr('href');
+
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: url,
-        data: JSON.stringify(formData),
         contentType: 'application/json',
         success: function (data) {
             window.location.reload();
         },
         error: function (data) {
-            bootbox.alert(JSON.parse(data.responseText).message);
             window.location.reload();
         }
     });
 });
 
-$(document).on('change', '#categories', function (e) {
-    var id = $('#categories option:selected').val();
-    window.location.href =window.location.href.replace( /[\?#].*|$/, "?category=" + id );
-});
 

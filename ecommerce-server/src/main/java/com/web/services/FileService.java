@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 
-import javax.xml.ws.ServiceMode;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,33 +22,29 @@ import java.util.UUID;
 @Service
 public class FileService {
 
-    private final String imagePath;
     private static final String SEP = File.separator;
 
     private final ImageService imageService;
 
     @Autowired
     public FileService(
-            @Value("${files.imagePath}") String imagePath,
             ImageService imageService
-    ){
-        this.imagePath = imagePath;
+    ) {
         this.imageService = imageService;
     }
 
     public void saveFile(List<FileDto> files, Product product) throws FileException, IOException {
-        for(FileDto file : files) {
-            if(file.getData() != null && !file.getData().equals("")) {
+        for (FileDto file : files) {
+            if (file.getData() != null && !file.getData().equals("")) {
                 byte[] data = (Base64.getDecoder().decode(file.getData()));
                 String[] extensions = file.getName().split("\\.");
                 UUID filename = UUID.randomUUID();
                 String strFilename = filename.toString() + "." + extensions[extensions.length - 1];
-                String path = imagePath + SEP + strFilename;
-                saveByteData(data, path);
+                //String path = imagePath + SEP + strFilename;
+                //saveByteData(data, path);
 
                 Image image = new Image();
                 image.setAltName(file.getName());
-                image.setPath(path);
                 image.getProducts().add(product);
                 image.setFileName(strFilename);
                 image.setData(data);
@@ -71,10 +64,10 @@ public class FileService {
         }
     }
 
-    public List<String> decodeImages(List<Image> images){
+    public List<String> decodeImages(List<Image> images) {
         List<String> img = new ArrayList<>();
 
-        for(Image image : images){
+        for (Image image : images) {
             String base64 = Base64.getEncoder().encodeToString(image.getData());
             img.add(base64);
         }

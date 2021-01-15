@@ -2,6 +2,7 @@ package com.web.controller;
 
 import com.ecommerce.data.dtos.UserDto;
 import com.ecommerce.data.entities.Category;
+import com.ecommerce.data.exceptions.ApiException;
 import com.ecommerce.data.services.UserService;
 import com.web.services.ExchangeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +48,21 @@ public class LoginController extends BasicController{
     @RequestMapping(value = "/submit")
     public String submitLogin(ModelMap map, @ModelAttribute UserDto userDto, HttpServletResponse httpServletResponse) {
         if(userDto != null && userDto.getLogin() != null) {
-            ResponseEntity<UserDto> response = restTemplate.postForEntity(loginUrl, userDto, UserDto.class);
-            HttpHeaders headers = response.getHeaders();
+            try {
 
-            Cookie cookie = new Cookie("token", headers.get("Authorization").get(0));
-            cookie.setPath("/");
-            httpServletResponse.addCookie(cookie);
+                ResponseEntity<UserDto> response = restTemplate.postForEntity(loginUrl, userDto, UserDto.class);
+                HttpHeaders headers = response.getHeaders();
+
+                Cookie cookie = new Cookie("token", headers.get("Authorization").get(0));
+                cookie.setPath("/");
+                cookie.setHttpOnly(true);
+                //cookie.setSecure(true); to enable on live env
+                httpServletResponse.addCookie(cookie);
+
+            }catch(ApiException exc){
+                map.put("error", "Nieprawidłowy login lub hasło.");
+                return "login";
+            }
 
             return "admin-main";
         }

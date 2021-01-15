@@ -7,16 +7,21 @@ import com.ecommerce.data.exceptions.EmailException;
 import com.web.services.DataService;
 import com.web.services.EmailService;
 import com.web.services.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/common")
 public class CommonRestController extends BasicController {
@@ -26,39 +31,38 @@ public class CommonRestController extends BasicController {
     private final EmailService emailService;
 
     @Autowired
-    public CommonRestController(DataService dataService, FileService fileService, EmailService emailService){
+    public CommonRestController(DataService dataService, FileService fileService, EmailService emailService) {
         this.dataService = dataService;
         this.fileService = fileService;
         this.emailService = emailService;
     }
 
     @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return dataService.getAllCategories();
+    public List<Category> getAllCategories() {
+        return dataService.getAllPublicCategories();
     }
 
     @GetMapping("/products")
-    public List<Product> getAllProducts(){
-        List<Product> products = dataService.getAllPublicProducts();
-        for(Product product : products){
-            product.setStringImages(fileService.decodeImages(product.getImages()));
+    public List<Product> getAllProducts(@RequestParam(value = "category", required = false) Long id) {
+        List<Product> products = null;
+        if(id != null){
+            products = dataService.getAllPublicProductsbyCategoryId(id);
+        }else {
+            products = dataService.getAllPublicProducts();
+        }
+
+        if(products != null) {
+            for (Product product : products) {
+                product.setStringImages(fileService.decodeImages(product.getImages()));
+            }
         }
 
         return products;
     }
 
-    @GetMapping("/products/category/{id}")
-    public List<Product> getAllProductsById(@PathVariable("id")String categoryId){
-        List<Product> products = dataService.getAllPublicProductsbyCategoryId(categoryId);
-        for(Product product : products){
-            product.setStringImages(fileService.decodeImages(product.getImages()));
-        }
-
-        return products;
-    }
 
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable("id")String categoryId){
+    public Product getProductById(@PathVariable("id") Long categoryId) {
         Product product = dataService.getPublicProductbyId(categoryId);
         product.setStringImages(fileService.decodeImages(product.getImages()));
 
@@ -67,6 +71,9 @@ public class CommonRestController extends BasicController {
 
     @PostMapping("/contact/send")
     public void sendContactMessage(@RequestBody ContactEmailDto message) throws EmailException {
+        log.info("Send email message to: {}", message.getEmail());
+        log.info("Send email message: {}", message.getMessage());
+
         emailService.sendMessage(message.getEmail(), message.getMessage());
     }
 }

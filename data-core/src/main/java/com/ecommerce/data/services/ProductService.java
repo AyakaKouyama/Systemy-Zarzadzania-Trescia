@@ -12,14 +12,14 @@ public interface ProductService {
 
     List<Product> getAllActiveProducts();
 
-    List<Product> getAllActiveProductsByCategoryId(String categoryId);
+    List<Product> getAllActiveProductsByCategoryId(Long categoryId);
 
     Product getProductById(Long id);
 
     Product getPublicProductById(Long id);
 
-    void deleteProduct(String productId);
+    void deleteProduct(Long productId);
 
-    void activateProduct(String productId, Boolean active);
+    void activateProduct(Long productId);
 
 }

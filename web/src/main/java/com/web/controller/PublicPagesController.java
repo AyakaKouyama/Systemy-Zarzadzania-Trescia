@@ -5,6 +5,7 @@ import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.services.UserService;
 import com.web.services.ExchangeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,9 +28,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class PublicPagesController extends BasicController {
 
@@ -42,11 +46,6 @@ public class PublicPagesController extends BasicController {
         this.restTemplate = restTemplate;
     }
 
-    @RequestMapping(value = "/about")
-    public String getAboutPage(){
-        return "about";
-    }
-
     @RequestMapping(value = "/contact")
     public String getContactPage(){
         return "contact";
@@ -56,7 +55,9 @@ public class PublicPagesController extends BasicController {
     public String index(ModelMap map, @RequestParam(value = "category", required = false) String categoryId) {
         List<Product> products = null;
         if(categoryId != null && !categoryId.equals("") && !categoryId.equals("-1")){
-            products = ExchangeUtils.exchangeData(commonUrl, "products/category/" + categoryId, HttpMethod.GET, new ParameterizedTypeReference<List<Product>>() {}, restTemplate, null, null);
+            Map<String, String> params = new HashMap();
+            params.put("category", categoryId);
+            products = ExchangeUtils.exchangeData(commonUrl, "products", HttpMethod.GET, new ParameterizedTypeReference<List<Product>>() {}, restTemplate, params, null);
         }else {
             products = ExchangeUtils.exchangeData(commonUrl,
                     "products",
@@ -83,7 +84,7 @@ public class PublicPagesController extends BasicController {
     }
 
     @RequestMapping(value = "/product/{id}")
-    public String productDetails(ModelMap map, @PathVariable("id")String productId){
+    public String productDetails(ModelMap map, @PathVariable("id")Long productId){
         Product product = ExchangeUtils.exchangeData(commonUrl, "products/" + productId, HttpMethod.GET, new ParameterizedTypeReference<Product>() {}, restTemplate, null, null);
 
         map.put("product", product);
@@ -94,6 +95,9 @@ public class PublicPagesController extends BasicController {
     @PostMapping(value = "/contact/send")
     public String sendEContactEmail(ModelMap map, @ModelAttribute ContactEmailDto message){
         try{
+            log.info("Send email message to: {}", message.getEmail());
+            log.info("Send email message: {}", message.getMessage());
+
             ExchangeUtils.postData(commonUrl, "contact/send", ContactEmailDto.class, restTemplate, null, message, null);
             map.put("response", "Twoja wiadomosć została wysłana. Dziękujemy!");
         }catch (Exception e) {

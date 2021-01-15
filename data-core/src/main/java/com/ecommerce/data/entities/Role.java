@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "authority"}, ignoreUnknown = true)
 public class Role extends BaseEntity implements GrantedAuthority {
 
     @Column(name = "role", nullable = false, unique = true)

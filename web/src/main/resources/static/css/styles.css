@@ -27,6 +27,7 @@ body{
     border-color: #389c8e;
 }
 
+
 .login-center{
     margin-top: 30vh;
     margin-left: 40%;
@@ -180,29 +181,30 @@ body{
         background-color: white;
     }
 
+    body{
+        background-color: white;
+    }
+
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {
     .main-container{
         background-color: white;
     }
-
+    body{
+        background-color: white;
+    }
 }
 /* tablets/desktops and up ----------- */
 @media (min-width: 992px) and (max-width: 1199px) {
     .main-container{
       background-color: white;
     }
-
+    body{
+        background-color: white;
+    }
 }
 /* large desktops and up ----------- */
 @media screen and (min-width: 1200px) {
-
-    .main-container{
-        background-image: url("../img/background.jpg");
-        background-repeat: no-repeat;
-        background-size: 100% 95%;
-        min-height: 85vh;
-    }
 
 }
