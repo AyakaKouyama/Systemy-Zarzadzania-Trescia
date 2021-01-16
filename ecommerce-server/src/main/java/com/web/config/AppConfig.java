@@ -2,6 +2,7 @@ package com.web.config;
 
 import com.ecommerce.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -32,6 +33,18 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Value("${contact.email}")
+    private String email;
+
+    @Value("${contact.password}")
+    private String password;
+
+    @Value("${contact.host}")
+    private String host;
+
+    @Value("${contact.port}")
+    private int port;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -79,12 +92,12 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+        mailSender.setHost(host);
+        mailSender.setPort(port);
         mailSender.setDefaultEncoding("UTF-8");
 
-        mailSender.setUsername("szt.sylwia.mieszkowska@gmail.com");
-        mailSender.setPassword("SZTEcommerce");
+        mailSender.setUsername(email);
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

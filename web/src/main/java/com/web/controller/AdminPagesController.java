@@ -216,8 +216,8 @@ public class AdminPagesController extends BasicController{
                     if(!f.getOriginalFilename().equals("") && !f.getOriginalFilename().endsWith(".jpg")){
                         map.put("error", "Niedozwolony format plików. Akceptowane formaty: jpg.");
                         return;
-                    }else if(f.getSize() > 2000000L){
-                        map.put("error", "Maksymalny rozmiar plików to 2 MB.");
+                    }else if(f.getSize() > 1000000L){
+                        map.put("error", "Maksymalny rozmiar plików to 1 MB.");
                         return;
                     }
 

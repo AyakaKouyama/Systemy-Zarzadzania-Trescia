@@ -1,5 +1,5 @@
 server:
-  port: 5000
+  port: 8089
   error:
     include-message: always
   forward-headers-strategy: framework
@@ -12,12 +12,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:mysql://szt.cvgdaih6dhcu.eu-central-1.rds.amazonaws.com:3306/szt?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
-    username: admin
-    password: NFHNI>|bdUjbx$0L
-    #url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
-    #username: root
-    #password: 12345678
+    #url: jdbc:mysql://szt.cvgdaih6dhcu.eu-central-1.rds.amazonaws.com:3306/szt?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+    #username: admin
+    #password: NFHNI>|bdUjbx$0L
+    url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 12345678
   servlet:
     multipart:
       max-file-size: 50MB
@@ -26,3 +26,6 @@ spring:
 
 contact:
   email: szt.sylwia.mieszkowska@gmail.com
+  password: SZTEcommerce
+  host: smtp.gmail.com
+  port: 587
