@@ -27,9 +27,9 @@ files:
 
 app:
   service:
-    #admin: http://ecommerce-env-1.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/admin/
-    #common: http://ecommerce-env-1.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/common/
-    #login: http://ecommerce-env-1.eba-92vxkqjr.eu-central-1.elasticbeanstalk.com/login
+    #admin: http://server-env.eba-v3gtm6ab.eu-central-1.elasticbeanstalk.com/admin/
+    #common: http://server-env.eba-v3gtm6ab.eu-central-1.elasticbeanstalk.com/common/
+    #login: http://server-env.eba-v3gtm6ab.eu-central-1.elasticbeanstalk.com/login
 
 
     admin: http://localhost:8089/admin/
