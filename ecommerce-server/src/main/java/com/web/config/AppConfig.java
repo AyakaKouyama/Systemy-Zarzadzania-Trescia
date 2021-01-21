@@ -54,6 +54,8 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/")
+                .permitAll()
                 .antMatchers("/common/**")
                 .permitAll()
                 .antMatchers("/login")
