@@ -7,19 +7,18 @@ https://github.com/AyakaKouyama/Systemy-Zarzadzania-Trescia/blob/main/SZT_Dokume
 Link do aplikacji:
   
 
-http://web-env.eba-qisxzdx5.eu-central-1.elasticbeanstalk.com
-
+http://web2-env.eba-23wzxgwy.eu-central-1.elasticbeanstalk.com
   
 Link do REST API:
 
   
-http://server-env.eba-zj4vmp3m.eu-central-1.elasticbeanstalk.com
+http://server2-env.eba-nc8unr9d.eu-central-1.elasticbeanstalk.com
 
   
 Logowanie do panelu administratora:
   
 
-http://web-env.eba-qisxzdx5.eu-central-1.elasticbeanstalk.com/login
+http://web2-env.eba-23wzxgwy.eu-central-1.elasticbeanstalk.com/login
   
 
 Login: sylwia.mieszkowska97@gmail.com
