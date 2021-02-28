@@ -12,7 +12,7 @@ http://web-env.eba-cappapkq.eu-central-1.elasticbeanstalk.com
 Link do REST API:
 
   
-http://server-env.eba-xhxvpetq.eu-central-1.elasticbeanstalk.com.com
+http://server-env.eba-xhxvpetq.eu-central-1.elasticbeanstalk.com
 
   
 Logowanie do panelu administratora:
