@@ -2,23 +2,23 @@ Dokumentacja:
 
 https://github.com/AyakaKouyama/Systemy-Zarzadzania-Trescia/blob/main/SZT_Dokumentacja.pdf
 
-(Linki zostały zakutalizowane dnia 21.02.2021 ze względu na kończący się darmowy okres na hostingu)
+(Linki zostały zakutalizowane dnia 28.02.2021 ze względu na kończący się darmowy okres na hostingu)
 
 Link do aplikacji:
   
 
-http://web2-env.eba-23wzxgwy.eu-central-1.elasticbeanstalk.com
+http://web-env.eba-cappapkq.eu-central-1.elasticbeanstalk.com
   
 Link do REST API:
 
   
-http://server2-env.eba-nc8unr9d.eu-central-1.elasticbeanstalk.com
+http://server-env.eba-xhxvpetq.eu-central-1.elasticbeanstalk.com.com
 
   
 Logowanie do panelu administratora:
   
 
-http://web2-env.eba-23wzxgwy.eu-central-1.elasticbeanstalk.com/login
+http://web-env.eba-cappapkq.eu-central-1.elasticbeanstalk.com/login
   
 
 Login: sylwia.mieszkowska97@gmail.com
