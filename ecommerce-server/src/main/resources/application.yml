@@ -12,9 +12,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    #url: jdbc:mysql://szt.cvgdaih6dhcu.eu-central-1.rds.amazonaws.com:3306/szt?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
-    #username: admin
-    #password: NFHNI>|bdUjbx$0L
+   # url: jdbc:mysql://database.cdgcoocnp5pp.eu-central-1.rds.amazonaws.com:3306/szt?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+   # username: admin
+   # password: NFHNI>|bdUjbx$0L
     url: jdbc:mysql://localhost:3306/szt-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 12345678
@@ -29,3 +29,13 @@ contact:
   password: SZTEcommerce
   host: smtp.gmail.com
   port: 587
+
+
+payu:
+  client-id: 404668
+  client-secret: 4e28d8d3e0658aaba19179192bf219cf
+  pos-id: 404668
+  token-url: https://secure.snd.payu.com/pl/standard/user/oauth/authorize
+  order-url: https://secure.snd.payu.com/api/v2_1/orders
+  language: pl
+  currency: PLN

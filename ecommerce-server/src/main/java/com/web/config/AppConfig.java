@@ -62,6 +62,8 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/admin")
                 .hasRole("ADMIN")
+                .antMatchers("/partner-dashboard")
+                .hasRole("PARTNER")
                 .anyRequest()
                 .authenticated()
                 .and()

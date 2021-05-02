@@ -1,5 +1,6 @@
 package com.ecommerce.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Cascade;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +31,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "carts"}, ignoreUnknown = true)
 @ToString(exclude = {"categories", "images"})
 public class Product extends BaseEntity {
 
@@ -78,6 +80,13 @@ public class Product extends BaseEntity {
             })
     private List<Category> categories = new ArrayList<>();
 
+
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    private List<Cart> carts = new ArrayList<>();
+
     @Transient
     private List<String> stringImages = new ArrayList<>();
+
+    private BigDecimal qty;
+    private BigDecimal sum;
 }

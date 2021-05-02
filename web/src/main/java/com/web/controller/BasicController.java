@@ -33,4 +33,5 @@ public abstract class BasicController {
     protected UserDto getCurrentUser(String token) {
         return ExchangeUtils.exchangeData(loginUrl, "/me", HttpMethod.GET, new ParameterizedTypeReference<UserDto>() {}, restTemplate, null, token);
     }
+
 }

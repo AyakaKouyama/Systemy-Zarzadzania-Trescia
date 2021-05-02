@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserService {
     public User findUserByLogin(String login) {
         return userRepository.findByLogin(login).orElse(null);
     }
+
+    @Override
+    public User findPartnerByRefLink(String ref) {
+        return  userRepository.findPartnerByRefLink(ref);
+    }
 }

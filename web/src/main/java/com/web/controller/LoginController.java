@@ -69,21 +69,5 @@ public class LoginController extends BasicController{
         return "login";
     }
 
-    @RequestMapping(value = "/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response){
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equalsIgnoreCase("token")){
-                    cookie.setPath("/");
-                    cookie.setValue("");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-            }
-        }
-
-        return "login";
-    }
 }
 

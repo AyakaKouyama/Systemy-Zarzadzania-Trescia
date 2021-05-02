@@ -79,6 +79,13 @@ public class LoginController {
 
         UserDto user = new UserDto();
         user.setLogin(userDetails.getLogin());
+        user.setPoints(userDetails.getPoints());
+        user.setLink(userDetails.getLinkCode());
+        user.setRole(userDetails.getRole().getRole());
+        user.setSoldItems(userDetails.getOrders().size());
+        user.setName(userDetails.getName());
+        user.setSurname(userDetails.getSurname());
+        user.setEnabled(userDetails.getEnabled());
 
         return user;
     }

@@ -32,6 +32,14 @@ public class AdminPageInterceptor implements HandlerInterceptor {
     public boolean preHandle(
             HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        if(request.getParameterMap() != null && request.getParameterMap().containsKey("ref")){
+            Cookie cookie = new Cookie("ref", request.getParameterMap().get("ref")[0]);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+        }
+
+
         if (request.getRequestURL().toString().contains("/admin")) {
             Cookie[] cookies = request.getCookies();
             List<Cookie> cookie = Arrays.stream(cookies)

@@ -12,8 +12,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -21,7 +25,7 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "password", "login", "authorities", "accountNonLocked", "credentialsNonExpired", "accountNonExpired"}, ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "password", "authorities", "accountNonLocked", "credentialsNonExpired", "accountNonExpired", "partner"}, ignoreUnknown = true)
 public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "login", nullable = false, unique = true)
@@ -32,6 +36,24 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
+
+    @Column(name = "create_date", nullable = false)
+    private Date createDate;
+
+    @Column(name = "link_code")
+    private String linkCode;
+
+    @Column(name = "points")
+    private BigDecimal points = BigDecimal.ZERO;
+
+    @OneToMany(mappedBy="partner")
+    private List<Order> orders;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
@@ -65,4 +87,6 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public int ordersSize;
 }

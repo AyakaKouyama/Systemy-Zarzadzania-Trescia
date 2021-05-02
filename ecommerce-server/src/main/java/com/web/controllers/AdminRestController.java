@@ -5,11 +5,15 @@ import com.ecommerce.data.dtos.CreateProductDto;
 import com.ecommerce.data.dtos.ProductDto;
 import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Image;
+import com.ecommerce.data.entities.Order;
 import com.ecommerce.data.entities.Product;
+import com.ecommerce.data.entities.User;
 import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.exceptions.FileException;
+import com.ecommerce.data.services.DbPartnerService;
 import com.web.services.DataService;
 import com.web.services.FileService;
+import com.web.services.PartnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,11 +33,13 @@ public class AdminRestController extends BasicController {
 
     private final DataService dataService;
     private final FileService fileService;
+    private final PartnerService partnerService;
 
     @Autowired
-    public AdminRestController(DataService dataService, FileService fileService) {
+    public AdminRestController(DataService dataService, FileService fileService, PartnerService dbPartnerService) {
         this.dataService = dataService;
         this.fileService = fileService;
+        this.partnerService = dbPartnerService;
     }
 
     @GetMapping("/categories")
@@ -41,9 +47,19 @@ public class AdminRestController extends BasicController {
         return dataService.getAllCategories();
     }
 
+    @GetMapping("/orders")
+    public List<Order> getAllOrders() {
+        return dataService.getAllOrders();
+    }
+
     @PostMapping("/categories")
     public void createCategory(@RequestBody CategoryDto categoryDto) throws AdminException {
         dataService.createCategory(categoryDto.getName(), categoryDto.getId());
+    }
+
+    @GetMapping("/partners")
+    public List<User> getPartners(){
+        return partnerService.getAllPartners();
     }
 
     @GetMapping("/categories/{categoryId}")
@@ -59,6 +75,11 @@ public class AdminRestController extends BasicController {
     @PostMapping("/categories/{categoryId}/activate")
     public void activateCategory(@PathVariable("categoryId") Long categoryId) {
         dataService.activateCategory(categoryId);
+    }
+
+    @PostMapping("/partners/{partnerId}/activate")
+    public void activatePartners(@PathVariable("partnerId") Long partnerId) {
+        partnerService.activatePartner(partnerId);
     }
 
 

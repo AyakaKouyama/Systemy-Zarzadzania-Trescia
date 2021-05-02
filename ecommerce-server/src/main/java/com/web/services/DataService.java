@@ -2,9 +2,11 @@ package com.web.services;
 
 
 import com.ecommerce.data.entities.Category;
+import com.ecommerce.data.entities.Order;
 import com.ecommerce.data.entities.Product;
 import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.services.CategoryService;
+import com.ecommerce.data.services.DbOrderService;
 import com.ecommerce.data.services.ImageService;
 import com.ecommerce.data.services.ProductService;
 import com.ecommerce.data.services.UserService;
@@ -25,16 +27,19 @@ public class DataService {
     private final ProductService productService;
     private final UserService userService;
     private final ImageService imageService;
+    private final DbOrderService orderService;
 
     @Autowired
     public DataService(CategoryService categoryService,
             ProductService productService,
             UserService userService,
-            ImageService imageService) {
+            ImageService imageService,
+            DbOrderService orderService) {
         this.categoryService = categoryService;
         this.productService = productService;
         this.userService = userService;
         this.imageService = imageService;
+        this.orderService = orderService;
     }
 
     public List<Category> getAllCategories() {
@@ -51,6 +56,10 @@ public class DataService {
 
     public List<Category> getAllPublicCategories() {
         return categoryService.getAllActiveCategories();
+    }
+
+    public List<Order> getAllOrders(){
+        return orderService.getAllOrders();
     }
 
     public List<Product> getAllPublicProductsbyCategoryId(Long categoryId) {

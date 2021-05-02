@@ -7,7 +7,9 @@ import com.ecommerce.data.dtos.ProductDto;
 import com.ecommerce.data.dtos.UserDto;
 import com.ecommerce.data.entities.Category;
 import com.ecommerce.data.entities.Image;
+import com.ecommerce.data.entities.Order;
 import com.ecommerce.data.entities.Product;
+import com.ecommerce.data.entities.User;
 import com.ecommerce.data.exceptions.AdminException;
 import com.ecommerce.data.exceptions.ApiException;
 import com.ecommerce.data.exceptions.FileException;
@@ -133,6 +135,12 @@ public class AdminPagesController extends BasicController{
     public String adminCategories(ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
         map.put("categories",getCategories(token));
         return "categories";
+    }
+
+    @RequestMapping(value = "/orders")
+    public String adminOrders(ModelMap map, @CookieValue(value = "token", defaultValue = "")String token) {
+        map.put("orders", getOrders(token));
+        return "orders";
     }
 
     @RequestMapping(value = "/add/category")
@@ -323,6 +331,35 @@ public class AdminPagesController extends BasicController{
         return "ok";
     }
 
+
+    @RequestMapping("/partners")
+    public String getPartnersPage(@CookieValue(value = "token", defaultValue = "")String token, ModelMap map){
+        if(!StringUtils.isEmpty(token)) {
+            UserDto user = getCurrentUser(token);
+
+            if(user.getRole().equals("ADMIN")){
+                List<User> partners = ExchangeUtils.exchangeData(adminUrl, "partners", HttpMethod.GET, new ParameterizedTypeReference<List<User>>() {}, restTemplate, null, token);
+                map.put("partners", partners);
+
+                return "partners-admin";
+            }
+        }
+
+        return null;
+    }
+
+    @GetMapping(value = "/partner/{id}/activate")
+    public String activatePartner(@PathVariable("id")Long categoryId, ModelMap map, @CookieValue(value = "token", defaultValue = "")String token, @Param("active")Boolean active) {
+        Map<String, String> params = new HashMap<>();
+        params.put("active", active.toString());
+
+        ExchangeUtils.exchangeData(adminUrl, "partners/" + categoryId + "/activate", HttpMethod.POST, new ParameterizedTypeReference<Product>() {}, restTemplate, params, token);
+        List<User> partners = ExchangeUtils.exchangeData(adminUrl, "partners", HttpMethod.GET, new ParameterizedTypeReference<List<User>>() {}, restTemplate, null, token);
+        map.put("partners", partners);
+
+        return "partners-admin";
+    }
+
     private  List<Category> getCategories(String token){
         return ExchangeUtils.exchangeData(adminUrl, "categories", HttpMethod.GET, new ParameterizedTypeReference<List<Category>>() {}, restTemplate, null, token);
     }
@@ -331,6 +368,9 @@ public class AdminPagesController extends BasicController{
         return ExchangeUtils.exchangeData(adminUrl, "products", HttpMethod.GET, new ParameterizedTypeReference<List<Product>>() {}, restTemplate, null, token);
     }
 
+    private List<Order> getOrders(String token){
+        return ExchangeUtils.exchangeData(adminUrl, "orders", HttpMethod.GET, new ParameterizedTypeReference<List<Order>>() {}, restTemplate, null, token);
+    }
 
 
 }
